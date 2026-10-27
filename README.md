@@ -125,7 +125,7 @@ const ItemCard = ({ id }) => {
 
 ### Integration with Immer
 
-Immer can be used with state setters returned from `useExternalState()` just the same way as [with `useState()`](https://immerjs.github.io/immer/example-setstate#usestate--immer) to facilitate deeply nested data changes.
+The same way as with `useState()`, Immer can be optionally used with state setters returned from `useExternalState()` to facilitate deeply nested data changes ([example](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)).
 
 ### Persistence across page reloads
 
