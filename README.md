@@ -149,7 +149,7 @@ const counterState = new PersistentState(0, { key: "counter" });
 
 ⬥ Set up interaction with a custom storage by setting `{ read(), write(value)? }` as `options` in `new PersistentState(value, options)`.
 
-⬥ `PersistentState` skips interaction with the browser storage in non-browser environments, which makes it usable with SSR. One way to avoid mismatch errors while hydrating SSR content based on a persisent state restored in the browser is using client-side rendering detection utilities such as [`react-clientside`](https://www.npmjs.com/package/react-clientside).
+⬥ `PersistentState` skips interaction with the browser storage in non-browser environments, which makes it usable with SSR. Since persistent state depends on a browser storage, mismatch errors while hydrating SSR content based on a persisent state should be specifically handled with React's `use(browser())` (v19.3+) or other client-side rendering detection techniques such as [`react-clientside`](https://www.npmjs.com/package/react-clientside).
 
 ## useRoute
 
