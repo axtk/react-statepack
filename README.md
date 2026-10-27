@@ -10,7 +10,7 @@ Core parts:
 
 Under the hood, routing is a special case of shared state management, too, with the shared state being the URL. So all these core parts fall under the broad category of state management, with `useExternalState()` being the most general-purpose React hook for shared state management.
 
-\+ [Annotated examples](#annotated-examples) · [Internals](#internals) · [Motivation and comparison](#motivation-and-comparison)
+\+ [Annotated live demos](#annotated-live-demos) · [Internals](#internals) · [Motivation and comparison](#motivation-and-comparison)
 
 ## useExternalState
 
@@ -125,7 +125,7 @@ const ItemCard = ({ id }) => {
 
 ### Integration with Immer
 
-The same way as with `useState()`, Immer can be optionally used with state setters returned from `useExternalState()` to facilitate deeply nested data changes ([example](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)).
+The same way as with `useState()`, Immer can be optionally used with state setters returned from `useExternalState()` to facilitate deeply nested data changes ([live demo](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)).
 
 ### Persistence across page reloads
 
@@ -173,7 +173,7 @@ const App = () => {
 
 ⬥ Use `at(url)` as a shorthand for `at(url, true, false)`. Example: `<Component isOpen={at("/")}/>`.
 
-⬥ By default, `useRoute` makes use of the browser's URL, if it's available. Otherwise, use `<RouteProvider href={url}>` to set a specific URL value. Common use cases: SSR and tests. A less common use case: custom routing behavior, including custom non-URL-based routing ([example](https://codesandbox.io/p/sandbox/tykt44?file=%252Fsrc%252FApp.tsx)).
+⬥ By default, `useRoute` makes use of the browser's URL, if it's available. Otherwise, use `<RouteProvider href={url}>` to set a specific URL value. Common use cases: SSR and tests. A less common use case: custom routing behavior, including custom non-URL-based routing ([live demo](https://codesandbox.io/p/sandbox/tykt44?file=%252Fsrc%252FApp.tsx)).
 
 ⬥ See also the [Type-safe routes](#type-safe-routes) section.
 
@@ -227,7 +227,7 @@ Using HTML link attributes as SPA link component props makes link components eas
 
 ⬥ Link components also automatically receive the `data-active="true"` prop whenever their `href` prop matches the current URL, which can be used for additional styling.
 
-⬥ Use the optional `callback` parameter of `useRoute(callback?)` for more fine-grained control over the component rendering in response to URL changes. This callback receives the `render` function as a parameter that should be called at some point. Use cases for this render callback include, for example, activating animated view transitions ([example](https://codesandbox.io/p/sandbox/w4q95n?file=%252Fsrc%252FApp.tsx)) or (less likely in regular circumstances) skipping re-renders for certain URL changes.
+⬥ Use the optional `callback` parameter of `useRoute(callback?)` for more fine-grained control over the component rendering in response to URL changes. This callback receives the `render` function as a parameter that should be called at some point. Use cases for this render callback include, for example, activating animated view transitions ([live demo](https://codesandbox.io/p/sandbox/w4q95n?file=%252Fsrc%252FApp.tsx)) or (less likely in regular circumstances) skipping re-renders for certain URL changes.
 
 ## useNavigationStart / useNavigationComplete
 
@@ -495,7 +495,7 @@ const initialState = {
 
 ⬥ With an explicit value or without, the `<TransientStateProvider>`'s nested components will only respond to updates in the particular action state they subscribed to by means of `useTransientState`.
 
-## Annotated examples
+## Annotated live demos
 
 Shared state
 
@@ -520,7 +520,7 @@ Async action state
 
 - [Shared async action state](https://codesandbox.io/p/sandbox/x9d2c9?file=%252Fsrc%252FItemList.tsx)
 
-Find also the code of these examples in the repo's [`tests`](https://github.com/axtk/react-statepack/tree/main/tests) directory.
+Find also the code of these live demos in the repo's [`tests`](https://github.com/axtk/react-statepack/tree/main/tests) directory.
 
 ## Internals
 
