@@ -273,6 +273,8 @@ const App = () => {
 };
 ```
 
+&#x2BC8; [Live demo: Routing middleware](https://codesandbox.io/p/sandbox/9ks34r?file=%2Fsrc%2FApp.tsx)
+
 ⬥ The object parameter of the hooks' callbacks has the shape of the `route.navigate()`'s options, including `href` and `referrer`, the navigation destination and initial URLs.
 
 ⬥ The callback of both hooks is first called when the component gets mounted if the route is already in the navigation-complete state.
@@ -527,6 +529,7 @@ Routing
 
 - [URL-based rendering](https://codesandbox.io/p/sandbox/2nv8ck?file=%252Fsrc%252FApp.tsx)
 - [Type-safe URL-based rendering](https://codesandbox.io/p/sandbox/tltq5r?file=%252Fsrc%252FApp.tsx)
+- [Routing middleware](https://codesandbox.io/p/sandbox/9ks34r?file=%2Fsrc%2FApp.tsx)
 - [URL parameters as state](https://codesandbox.io/p/sandbox/6rp4sy?file=%252Fsrc%252FApp.tsx)
 - [Type-safe URL parameters as state](https://codesandbox.io/p/sandbox/6ck4qz?file=%252Fsrc%252FShapeSection.tsx)
 - [Type-safe nested routes](https://codesandbox.io/p/sandbox/pv9rgh?file=%252Fsrc%252FApp.tsx)
