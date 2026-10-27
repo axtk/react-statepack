@@ -46,6 +46,8 @@ Move local state to the full-fledged shared state with minimal paradigm shift an
   const App = () => <><Counter/>{" "}<ResetButton/></>;
 ```
 
+&#x2BC8; [Live demo: Shared state without Context](https://codesandbox.io/p/sandbox/gxkn85?file=%252Fsrc%252FApp.tsx)
+
 The shared state instance `new State(initialValue)` can contain data of any type, primitive or nonprimitive.
 
 With TypeScript, the value type of a `State` instance is inferred from the initial value, or it can be explicitly specified with a generic type as `new State<T>(value)`.
@@ -73,6 +75,8 @@ const App = () => (
   </AppContext.Provider>
 );
 ```
+
+&#x2BC8; [Live demo: Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
 
 ⬥ Like any data in a React app, the external state can also be split across multiple instances of `State` and multiple Contexts to maintain clearer semantic boundaries and more targeted data update subscriptions.
 
@@ -125,7 +129,9 @@ const ItemCard = ({ id }) => {
 
 ### Integration with Immer
 
-The same way as with `useState()`, Immer can be optionally used with state setters returned from `useExternalState()` to facilitate deeply nested data changes. &#x2BC8; [Live demo](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)
+The same way as with `useState()`, Immer can be optionally used with state setters returned from `useExternalState()` to facilitate deeply nested data changes.
+
+&#x2BC8; [Live demo: Shared state with Immer](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)
 
 ### Persistence across page reloads
 
@@ -169,13 +175,15 @@ const App = () => {
 };
 ```
 
+&#x2BC8; [Live demo: URL-based rendering](https://codesandbox.io/p/sandbox/2nv8ck?file=%252Fsrc%252FApp.tsx)
+
 ⬥ `params` in dynamic values (as in `({ params }) => <Section id={params.id}/>` above) contains the URL pattern's capturing groups.
 
 ⬥ Use `at(url)` as a shorthand for `at(url, true, false)`. Example: `<Component isOpen={at("/")}/>`.
 
-⬥ By default, `useRoute` makes use of the browser's URL, if it's available. Otherwise, use `<RouteProvider href={url}>` to set a specific URL value. Common use cases: SSR and tests. A less common use case: custom routing behavior, including custom non-URL-based routing. &#x2BC8; [Live demo](https://codesandbox.io/p/sandbox/tykt44?file=%252Fsrc%252FApp.tsx)
+⬥ By default, `useRoute` makes use of the browser's URL, if it's available. Otherwise, use `<RouteProvider href={url}>` to set a specific URL value. Common use cases: SSR and tests. A less common use case: custom routing behavior, including custom non-URL-based routing. &#x2BC8; [Live demo: Custom routing based on text input](https://codesandbox.io/p/sandbox/tykt44?file=%252Fsrc%252FApp.tsx)
 
-⬥ See also the [Type-safe routes](#type-safe-routes) section.
+⬥ See also the [Type-safe routes](#type-safe-routes) section. &#x2BC8; [Live demo: Type-safe URL-based rendering](https://codesandbox.io/p/sandbox/tltq5r?file=%252Fsrc%252FApp.tsx)
 
 ⬥ Routing with `react-statepack` is based on the core idea behind all approaches to route-based rendering: conditional rendering based on the URL. Unlike component-, config-, or file-based approaches, the `react-statepack`'s imperative approach sticks to this core idea without additional abstraction layers and specific relations between routes (like layout nesting or parameter inheritance) offering full explicit control over route-based rendering.
 
@@ -204,6 +212,8 @@ The shape of the SPA navigation API is largely aligned with the similar built-in
   };
 ```
 
+&#x2BC8; [Live demo: Link components](https://codesandbox.io/p/sandbox/2nv8ck?file=%252Fsrc%252FApp.tsx)
+
 ⬥ `<A>` and `<Area>` are the two kinds of SPA route link components available out of the box. They have the same props and semantics as the corresponding HTML link elements `<a>` and `<area>`.
 
 ⬥ The `route` object returned from `useRoute()` exposes an API resembling the built-in APIs of `window.location` and `history` carried over to SPA navigation: `.assign(url)`, `.replace(url)`, `.reload()`, `.href`, `.pathname`, `.search`, `.hash`, `.back()`, `.forward()`, `.go(delta)`.
@@ -227,7 +237,7 @@ Using HTML link attributes as SPA link component props makes link components eas
 
 ⬥ Link components also automatically receive the `data-active="true"` prop whenever their `href` prop matches the current URL, which can be used for additional styling.
 
-⬥ Use the optional `callback` parameter of `useRoute(callback?)` for more fine-grained control over the component rendering in response to URL changes. This callback receives the `render` function as a parameter that should be called at some point. Use cases for this render callback include, for example, activating animated view transitions (&#x2BC8; [Live demo](https://codesandbox.io/p/sandbox/w4q95n?file=%252Fsrc%252FApp.tsx)) or (less likely in regular circumstances) skipping re-renders for certain URL changes.
+⬥ Use the optional `callback` parameter of `useRoute(callback?)` for more fine-grained control over the component rendering in response to URL changes. This callback receives the `render` function as a parameter that should be called at some point. Use cases for this render callback include, for example, activating animated view transitions (&#x2BC8; [Live demo: View transitions](https://codesandbox.io/p/sandbox/w4q95n?file=%252Fsrc%252FApp.tsx)) or (less likely in regular circumstances) skipping re-renders for certain URL changes.
 
 ## useNavigationStart / useNavigationComplete
 
@@ -300,9 +310,11 @@ When it's necessary to put a portion of the app's state to the URL, use this hoo
   };
 ```
 
+&#x2BC8; [Live demo: URL parameters as state](https://codesandbox.io/p/sandbox/6rp4sy?file=%252Fsrc%252FApp.tsx)
+
 ⬥ `useRouteState(url, options?)` has an optional second parameter in the shape of the `route.navigate()`'s options. Pass `{ scroll: "off" }` as `options` to opt out from the default scroll-to-the-top behavior when the URL changes.
 
-⬥ See also the [Type-safe routes](#type-safe-routes) section.
+⬥ See also the [Type-safe routes](#type-safe-routes) section. &#x2BC8; [Live demo: Type-safe URL parameters as state](https://codesandbox.io/p/sandbox/6ck4qz?file=%252Fsrc%252FShapeSection.tsx)
 
 ## Type-safe routes
 
@@ -318,7 +330,9 @@ const [state, setState] = useRouteState("/");
     // ^ { query: Record<string, string | undefined> }
 ```
 
-Optionally, more specific type-aware parsing of URL parameters can be achieved by replacing string and RegExp URL patterns with URL patterns produced by a schema-based URL builder, like with `url-shape` and `zod` or a [similar tool](https://standardschema.dev/schema#what-schema-libraries-implement-the-spec):
+&#x2BC8; Loosely typed routing demos: [URL-based rendering](https://codesandbox.io/p/sandbox/2nv8ck?file=%252Fsrc%252FApp.tsx) &middot; [URL parameters as state](https://codesandbox.io/p/sandbox/6rp4sy?file=%252Fsrc%252FApp.tsx)
+
+While the loosely typed routing as shown above works just fine, optionally, more specific type-aware parsing of URL parameters can be achieved by replacing string and RegExp URL patterns with URL patterns produced by a schema-based URL builder, like with `url-shape` and `zod` or a [similar tool](https://standardschema.dev/schema#what-schema-libraries-implement-the-spec):
 
 ```ts
 import { createURLBuilder } from "url-shape";
@@ -351,6 +365,8 @@ const [state, setState] = useRouteState(url("/"));
 <A href={url("/sections/:id", { id: 1 })}>Section 1</A>
                            // ^ { id: number }
 ```
+
+&#x2BC8; Live demos: [Type-safe URL-based rendering](https://codesandbox.io/p/sandbox/tltq5r?file=%252Fsrc%252FApp.tsx) &middot; [Type-safe URL parameters as state](https://codesandbox.io/p/sandbox/6ck4qz?file=%252Fsrc%252FShapeSection.tsx)
 
 The URL schema as shown above doesn't have to cover the entire app. This approach allows for incremental or partial adoption of type-safe routing, where needed.
 
@@ -388,6 +404,8 @@ export const url = createURLBuilder({
   }),
 });
 ```
+
+&#x2BC8; [Live demo: Type-safe nested routes](https://codesandbox.io/p/sandbox/pv9rgh?file=%252Fsrc%252FApp.tsx)
 
 ## useTransientState
 
@@ -430,6 +448,8 @@ In the example below, storing and rendering the essential app data (`items`) and
     return <>OK</>;
   };
 ```
+
+&#x2BC8; [Live demo: Shared async action state](https://codesandbox.io/p/sandbox/x9d2c9?file=%252Fsrc%252FItemList.tsx)
 
 ### Shared and local async action state
 
