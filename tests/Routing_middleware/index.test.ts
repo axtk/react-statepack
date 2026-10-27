@@ -107,7 +107,7 @@ test.describe("routing middleware", () => {
     await p.hasSectionTitle("Section 1");
 
     await p.setInput("");
-    
+
     // Can leave with empty input
     await p.clickLink("Section 2");
     await p.hasPath("/sections/2");
