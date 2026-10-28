@@ -1,43 +1,25 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isState, type State, type StatePayloadMap } from "statepack";
-import type { RenderCallback } from "./types/RenderCallback.ts";
+
+export type Subscribe<
+  T,
+  P extends StatePayloadMap<T> = StatePayloadMap<T>,
+> = (state: State<T, P>, render: () => void) => void | (() => void);
 
 export type SetExternalStateValue<
   T,
   P extends StatePayloadMap<T> = StatePayloadMap<T>,
 > = State<T, P>["setValue"];
 
-export type UseExternalStateCallback<
-  T = unknown,
-  P extends StatePayloadMap<T> = StatePayloadMap<T>,
-> = (render: () => void, { current, previous }: P["update"]) => void;
-
-const defaultRenderCallback = (render: () => void) => render();
-
-export function useExternalState<T, P extends StatePayloadMap<T>>(
-  state: State<T, P>,
-  callback?: RenderCallback<P["update"]> | boolean,
-): [T, SetExternalStateValue<T, P>];
-
 export function useExternalState<
   T,
   P extends StatePayloadMap<T>,
-  E extends keyof P,
+  V = T,
 >(
   state: State<T, P>,
-  callback?: RenderCallback<P[E]> | boolean,
-  event?: E,
-): [T, SetExternalStateValue<T, P>];
-
-export function useExternalState<
-  T,
-  P extends StatePayloadMap<T>,
-  E extends string,
->(
-  state: State<T, P>,
-  callback: RenderCallback<P[E]> | boolean = defaultRenderCallback,
-  event?: E,
-): [T, SetExternalStateValue<T, P>] {
+  subscribe?: Subscribe<T, P> | boolean,
+  getSnapshot?: (state: State<T, P>) => V,
+): [V, SetExternalStateValue<T, P>] {
   if (!isState<T, P>(state))
     throw new TypeError("'state' is not an instance of State");
 
@@ -51,7 +33,7 @@ export function useExternalState<
     // Start the state if it's not started yet
     state.start();
 
-    if (callback === false) return;
+    if (subscribe === false) return;
 
     shouldUpdate.current = true;
 
@@ -60,21 +42,22 @@ export function useExternalState<
       if (shouldUpdate.current) setRevision(Math.random());
     };
 
-    let resolvedCallback =
-      typeof callback === "function" ? callback : defaultRenderCallback;
-
-    let unsubscribe = state.on(event ?? "update", (payload) => {
-      resolvedCallback(render, payload as P[E]);
-    });
+    let cleanup = typeof subscribe === "function"
+      ? subscribe(state, render)
+      : state.on("update", render);
 
     if (state.revision !== initialStateRevision.current) render();
 
     return () => {
-      unsubscribe();
+      cleanup?.();
       initialStateRevision.current = state.revision;
       shouldUpdate.current = false;
     };
-  }, [state, callback, event]);
+  }, [state, subscribe]);
 
-  return [state.getValue(), setValue];
+  let value = getSnapshot === undefined
+    ? state.getValue() as unknown as V
+    : getSnapshot(state);
+
+  return [value, setValue];
 }

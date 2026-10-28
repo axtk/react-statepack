@@ -3,6 +3,8 @@ export * from "./src/A.tsx";
 export * from "./src/Area.tsx";
 export * from "./src/RouteContext.ts";
 export * from "./src/RouteProvider.tsx";
+export * from "./src/select.ts";
+export * from "./src/shallowEqual.ts";
 export * from "./src/TransientStateContext.ts";
 export * from "./src/TransientStateProvider.tsx";
 export * from "./src/types/AProps.ts";

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { State, useExternalState } from "../../../index.ts";
+import { select, State, useExternalState } from "../../../index.ts";
 import { fetchPoints } from "./fetchPoints.ts";
 import { fetchUsers, type User } from "./fetchUsers.ts";
 
@@ -12,28 +12,19 @@ const points = new State<Record<string, number>>({});
 const AppContext = createContext({ users, points });
 
 const UserName = ({ id }: { id: string }) => {
-  const [users] = useExternalState(
+  const [name] = useExternalState(...select(
     useContext(AppContext).users,
-    // The hook callback allows to filter irrelevant state updates.
-    // This component will only re-render if it receives an updated user name
-    // for the given user ID.
-    (render, { current, previous }) => {
-      if (current[id]?.name !== previous[id]?.name) render();
-    },
-  );
-
-  return <>{users[id]?.name}</>;
+    (users) => users[id]?.name,
+  ));
+  return <>{name}</>;
 };
 
 const UserPoints = ({ id }: { id: string }) => {
-  const [points] = useExternalState(
+  const [points] = useExternalState(...select(
     useContext(AppContext).points,
-    (render, { current, previous }) => {
-      if (current[id] !== previous[id]) render();
-    },
-  );
-
-  return <strong>{points[id] ?? 0}</strong>;
+    (points) => points[id],
+  ));
+  return <strong>{points ?? 0}</strong>;
 };
 
 const TableRow = ({ id }: { id: string }) => (
