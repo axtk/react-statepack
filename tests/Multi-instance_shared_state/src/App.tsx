@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { select, State, useExternalState } from "../../../index.ts";
+import { State, select, useExternalState } from "../../../index.ts";
 import { fetchPoints } from "./fetchPoints.ts";
 import { fetchUsers, type User } from "./fetchUsers.ts";
 
@@ -12,18 +12,16 @@ const points = new State<Record<string, number>>({});
 const AppContext = createContext({ users, points });
 
 const UserName = ({ id }: { id: string }) => {
-  const [name] = useExternalState(...select(
-    useContext(AppContext).users,
-    (users) => users[id]?.name,
-  ));
+  const [name] = useExternalState(
+    ...select(useContext(AppContext).users, (users) => users[id]?.name),
+  );
   return <>{name}</>;
 };
 
 const UserPoints = ({ id }: { id: string }) => {
-  const [points] = useExternalState(...select(
-    useContext(AppContext).points,
-    (points) => points[id],
-  ));
+  const [points] = useExternalState(
+    ...select(useContext(AppContext).points, (points) => points[id]),
+  );
   return <strong>{points ?? 0}</strong>;
 };
 

@@ -1,6 +1,6 @@
-import { State, StatePayloadMap } from "statepack";
-import { useExternalState } from "./useExternalState.ts";
+import type { State, StatePayloadMap } from "statepack";
 import { shallowEqual } from "./shallowEqual.ts";
+import type { useExternalState } from "./useExternalState.ts";
 
 export function select<
   T,
