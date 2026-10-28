@@ -38,8 +38,12 @@ const UserPoints = ({ id }: { id: string }) => {
 
 const TableRow = ({ id }: { id: string }) => (
   <tr>
-    <td><UserName id={id}/></td>
-    <td><UserPoints id={id}/></td>
+    <td>
+      <UserName id={id} />
+    </td>
+    <td>
+      <UserPoints id={id} />
+    </td>
   </tr>
 );
 
@@ -63,11 +67,14 @@ updatePoints();
 export const App = () => (
   <table>
     <thead>
-      <tr><td>User</td><td>Points</td></tr>
+      <tr>
+        <td>User</td>
+        <td>Points</td>
+      </tr>
     </thead>
     <tbody>
-      <TableRow id="jane"/>
-      <TableRow id="jack"/>
+      <TableRow id="jane" />
+      <TableRow id="jack" />
     </tbody>
   </table>
 );

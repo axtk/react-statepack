@@ -7,7 +7,10 @@ export type SetExternalStateValue<
   P extends StatePayloadMap<T> = StatePayloadMap<T>,
 > = State<T, P>["setValue"];
 
-export type UseExternalStateCallback<T = unknown, P extends StatePayloadMap<T> = StatePayloadMap<T>> = (render: () => void, { current, previous }: P["update"]) => void;
+export type UseExternalStateCallback<
+  T = unknown,
+  P extends StatePayloadMap<T> = StatePayloadMap<T>,
+> = (render: () => void, { current, previous }: P["update"]) => void;
 
 const defaultRenderCallback = (render: () => void) => render();
 

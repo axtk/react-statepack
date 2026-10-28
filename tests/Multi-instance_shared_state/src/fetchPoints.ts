@@ -13,8 +13,7 @@ export async function fetchPoints() {
       () => {
         if (inited) {
           // One user gets a point whenever the points are requested
-          const randomId =
-            userIds[Math.floor(userIds.length * Math.random())];
+          const randomId = userIds[Math.floor(userIds.length * Math.random())];
           points[randomId] = points[randomId] < 1e4 ? points[randomId] + 1 : 0;
         }
 

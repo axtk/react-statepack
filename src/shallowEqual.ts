@@ -3,8 +3,12 @@ export function shallowEqual(a: unknown, b: unknown): boolean {
     return true;
   }
 
-  if (typeof a !== "object" || a === null || 
-      typeof b !== "object" || b === null) {
+  if (
+    typeof a !== "object" ||
+    a === null ||
+    typeof b !== "object" ||
+    b === null
+  ) {
     return false;
   }
 
