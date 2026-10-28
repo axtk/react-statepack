@@ -98,28 +98,58 @@ const ItemCard = ({ id }) => {
 
 ⬥ Note that updating the `State` value doesn't change the instance's reference sitting in the React Context and therefore doesn't cause updates of the entire Context. Only the components subscribed to updates of the particular `State` instance by means of `useExternalState(state)` will be notified to re-render.
 
-### Render callback
+### Selectors
 
-Use the optional render callback of `useExternalState(state, callback)` for fine-grained control over component's re-renders within a particular state subscription:
+Use the `select(state, selector)` utility with `useExternalState()` to pick a state value derived from `state` as defined by the `selector()` function:
+
+```jsx
+import { State, useExternalState, select } from "react-statepack";
+
+const AppContext = createContext({
+  items: new State({/* ... id: { name: string } */}),
+  // ...
+});
+
+const ItemCard = ({ id }: { id: string }) => {
+  const [name] = useExternalState(...select(
+    useContext(AppContext).items,
+    (items) => items[id]?.name,
+  ));
+  return <div className="item">Name: {name}</div>;
+};
+```
+
+&#x2BC8; [Live demo: Multi-instance state + selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
+
+⬥ With a selector subscription to a `State` instance, the component will only be notified to re-render when the state snapshot returned from the selector changes. By default, whether there's no value change is determined as shallow equality of the previous and current snapshots. Optionally, another equality function can be set as the third parameter of `select()`.
+
+⬥ The state setter returned from `useExternalState(...select(state, selector))` alongside the selector snapshot updates the entire state regardless of the selector.
+
+### Custom subscription
+
+Create a custom subscription to the `State` instance with the second parameter of `useExternalState(state, subscribe?)` for more fine-grained control over component's re-renders:
 
 ```js
 const itemState = new State({/* A map of `<id>: <item>` */});
 
 // Renders a specific item from `itemState`
 const ItemCard = ({ id }) => {
-  const [items, setItems] = useExternalState(itemState, (render, { current, previous }) => {
-    // Assuming that the items have a `timestamp` property, re-render
-    // `ItemCard` only if the relevant item's `timestamp` has increased
-    if (current[id].timestamp > previous[id].timestamp) render();
+  const [items, setItems] = useExternalState(itemState, (state, render) => {
+    // The subscription returns a cleanup function.
+    return state.on("update", ({ current, previous }) => {
+      // Assuming that the items have a `timestamp` property, re-render
+      // `ItemCard` only if the relevant item's `timestamp` has increased
+      if (current[id].timestamp > previous[id].timestamp) render();
+    });
   });
 
   // ...
 };
 ```
 
-⬥ Use the optional `false` parameter in `useExternalState(state, false)` to tell the hook not to subscribe the component to tracking the external state updates altogether. A use case for it is when a component makes use of the external state value setter without using the state value itself. The `false` parameter could have been used in the `ResetButton` in the first example above, but in many cases with lightweight component renders it might be unnecessary, since React automatically skips updating the DOM when there are no changes.
+⬥ Set the `subscribe` parameter to `false`, as in `useExternalState(state, false)`, to tell the hook not to subscribe the component to tracking the external state updates altogether. A use case for it is when a component makes use of the external state value setter without using the state value itself. The `false` parameter could have been used in the `ResetButton` in the first example above, but in many cases of infrequent updates with lightweight component renders it might be unnecessary, since React automatically skips updating the DOM when there are no changes.
 
-⬥ Under the hood, `useSelectedExternalState()` is based on `useExternalState()` with a render callback making use of the state selector.
+⬥ Under the hood, the `select(state, selector)` utility, discussed in the previous section, creates a custom subscription based on the selector function which is then passed to `useExternalState()`.
 
 ### Integration with Immer
 
@@ -518,6 +548,7 @@ Shared state
 - [Shared state without Context](https://codesandbox.io/p/sandbox/gxkn85?file=%252Fsrc%252FApp.tsx)
 - [Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
 - [Shared state with Immer](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)
+- [Multi-instance state / Selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
 
 Routing
 
