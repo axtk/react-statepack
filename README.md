@@ -8,7 +8,7 @@ Core parts:
 - Routing: [useRoute](#useroute) · [useNavigationStart / useNavigationComplete](#usenavigationstart--usenavigationcomplete) · [useRouteState](#useroutestate) · [Type-safe routes](#type-safe-routes)
 - Async state management: [useTransientState](#usetransientstate)
 
-Under the hood, routing is a special case of shared state management, too, with the shared state being the URL. So all these core parts fall under the broad category of state management, with `useExternalState()` being the most general-purpose React hook for shared state management.
+Under the hood, routing is a special case of shared state management, too, with the shared state being the URL. So all these core parts fall under the broad category of state management, with `useExternalState()` being the general-purpose React hook for arbitrary state management (which is also the basis of the lib's other hooks).
 
 \+ [Annotated live demos](#annotated-live-demos) · [Internals](#internals) · [Motivation and comparison](#motivation-and-comparison)
 
@@ -107,14 +107,15 @@ import { State, useExternalState, select } from "react-statepack";
 
 const AppContext = createContext({
   items: new State({/* ... id: { name: string } */}),
-  // ...
+  // ... Other data on the Context
 });
 
 const ItemCard = ({ id }: { id: string }) => {
   const [name] = useExternalState(...select(
-    useContext(AppContext).items,
-    (items) => items[id]?.name,
+    useContext(AppContext).items, // State instance
+    (items) => items[id]?.name,   // Selector
   ));
+
   return <div className="item">Name: {name}</div>;
 };
 ```
@@ -127,7 +128,7 @@ const ItemCard = ({ id }: { id: string }) => {
 
 ### Custom subscription
 
-Create a custom subscription to the `State` instance with the second parameter of `useExternalState(state, subscribe?)` for more fine-grained control over component's re-renders:
+Use the second parameter of `useExternalState(state, subscribe?)` for more fine-grained control over component's subscription to the `State` instance and re-renders:
 
 ```js
 const itemState = new State({/* A map of `<id>: <item>` */});
