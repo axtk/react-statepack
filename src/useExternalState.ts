@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isState, type State, type StatePayloadMap } from "statepack";
 
-export type Subscribe<T, P extends StatePayloadMap<T> = StatePayloadMap<T>> = (
-  state: State<T, P>,
-  render: () => void,
-) => void | (() => void);
+export type Subscribe = (render: () => void) => void | (() => void);
 
 export type SetExternalStateValue<
   T,
@@ -13,8 +10,8 @@ export type SetExternalStateValue<
 
 export function useExternalState<T, P extends StatePayloadMap<T>, V = T>(
   state: State<T, P>,
-  subscribe?: Subscribe<T, P> | boolean,
-  getSnapshot?: (state: State<T, P>) => V,
+  subscribe?: Subscribe | boolean,
+  getSnapshot?: () => V,
 ): [V, SetExternalStateValue<T, P>] {
   if (!isState<T, P>(state))
     throw new TypeError("'state' is not an instance of State");
@@ -40,7 +37,7 @@ export function useExternalState<T, P extends StatePayloadMap<T>, V = T>(
 
     let cleanup =
       typeof subscribe === "function"
-        ? subscribe(state, render)
+        ? subscribe(render)
         : state.on("update", render);
 
     if (state.revision !== initialStateRevision.current) render();
@@ -55,7 +52,7 @@ export function useExternalState<T, P extends StatePayloadMap<T>, V = T>(
   let value =
     getSnapshot === undefined
       ? (state.getValue() as unknown as V)
-      : getSnapshot(state);
+      : getSnapshot();
 
   return [value, setValue];
 }

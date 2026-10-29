@@ -13,11 +13,11 @@ export function select<
 ): Parameters<typeof useExternalState<T, P, V>> {
   return [
     state,
-    (state, render) => {
-      state.on("update", ({ current, previous }) => {
+    (render) => {
+      return state.on("update", ({ current, previous }) => {
         if (!equal(selector(current), selector(previous))) render();
       });
     },
-    (state) => selector(state.getValue()),
+    () => selector(state.getValue()),
   ];
 }
