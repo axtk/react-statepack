@@ -135,9 +135,9 @@ const itemState = new State({/* A map of `<id>: <item>` */});
 
 // Renders a specific item from `itemState`
 const ItemCard = ({ id }) => {
-  const [items, setItems] = useExternalState(itemState, (state, render) => {
-    // The subscription returns a cleanup function.
-    return state.on("update", ({ current, previous }) => {
+  const [items, setItems] = useExternalState(itemState, (render) => {
+    // The subscription to the state events returns a cleanup function.
+    return itemState.on("update", ({ current, previous }) => {
       // Assuming that the items have a `timestamp` property, re-render
       // `ItemCard` only if the relevant item's `timestamp` has increased
       if (current[id].timestamp > previous[id].timestamp) render();
