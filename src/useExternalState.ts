@@ -20,19 +20,19 @@ export function useExternalState<T, P extends StatePayloadMap<T>, V = T>(
 
   let setValue = useMemo(() => state.setValue.bind(state), [state]);
   let initialStateRevision = useRef(state.revision);
-  let shouldUpdate = useRef(false);
+  let mounted = useRef(false);
 
   useEffect(() => {
-    // Start the state if it's not started yet
+    // The `start()` and `stop()` methods allow some varieties of State (like
+    // PersistentState) to hook into the component's life cycle.
     state.start();
 
     if (subscribe === false) return;
 
-    shouldUpdate.current = true;
+    mounted.current = true;
 
     let render = () => {
-      // Use `setRevision()` as long as the component is mounted
-      if (shouldUpdate.current) setRevision(Math.random());
+      if (mounted.current) setRevision(Math.random());
     };
 
     let cleanup =
@@ -40,12 +40,16 @@ export function useExternalState<T, P extends StatePayloadMap<T>, V = T>(
         ? subscribe(render)
         : state.on("update", render);
 
+    // Update the component if the state receives updates after the component
+    // has already got mounted but before this effect runs and the component
+    // subscribes to the state.
     if (state.revision !== initialStateRevision.current) render();
 
     return () => {
       cleanup?.();
+      state.stop();
       initialStateRevision.current = state.revision;
-      shouldUpdate.current = false;
+      mounted.current = false;
     };
   }, [state, subscribe]);
 
