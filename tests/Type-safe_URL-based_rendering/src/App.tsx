@@ -19,19 +19,23 @@ const url = createURLBuilder({
   "/": z.object({}), // No parameters, empty schema
 });
 
-const Intro = () => (
-  <main>
-    <h2>Intro</h2>
-  </main>
-);
+function Intro() {
+  return (
+    <main>
+      <h2>Intro</h2>
+    </main>
+  );
+}
 
-const Section = ({ id }: { id: number }) => (
-  <main>
-    <h2>Section {id}</h2>
-  </main>
-);
+function Section({ id }: { id: number }) {
+  return (
+    <main>
+      <h2>Section {id}</h2>
+    </main>
+  );
+}
 
-export const App = () => {
+export function App() {
   const { at } = useRoute();
 
   return (
@@ -58,4 +62,4 @@ export const App = () => {
       ))}
     </>
   );
-};
+}

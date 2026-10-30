@@ -3,23 +3,29 @@ import { A, useRoute } from "../../../index.ts";
 // `<A>` is a link component which is like a plain HTML link
 // for SPA navigation
 
-const Intro = () => (
-  <main>
-    <h2>Intro</h2>
-  </main>
-);
+function Intro() {
+  return (
+    <main>
+      <h2>Intro</h2>
+    </main>
+  );
+}
 
-const Section = ({ id }: { id: string | undefined }) => (
-  <main>
-    <h2>Section {id}</h2>
-  </main>
-);
+function Section({ id }: { id: string | undefined }) {
+  return (
+    <main>
+      <h2>Section {id}</h2>
+    </main>
+  );
+}
 
-const ErrorSection = () => (
-  <main>
-    <h2>Error 404</h2>
-  </main>
-);
+function ErrorSection() {
+  return (
+    <main>
+      <h2>Error 404</h2>
+    </main>
+  );
+}
 
 const routes = {
   intro: "/",
@@ -28,7 +34,7 @@ const routes = {
 
 const knownRoutes = Object.values(routes);
 
-export const App = () => {
+export function App() {
   const { at } = useRoute();
 
   return (
@@ -60,4 +66,4 @@ export const App = () => {
         doesn't have to be the last one. */}
     </>
   );
-};
+}

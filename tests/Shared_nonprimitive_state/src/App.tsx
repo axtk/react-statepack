@@ -5,13 +5,13 @@ const AppContext = createContext(new State({ counter: 0 }));
 // `new State(value)` can contain any kind of value,
 // of primitive or nonprimitive type
 
-const Display = () => {
+function Display() {
   const [state] = useExternalState(useContext(AppContext));
 
   return <span>{state.counter}</span>;
-};
+}
 
-const PlusButton = () => {
+function PlusButton() {
   // This component doesn't make use of the state value, so we are
   // opting out from subscription to its updates by adding `false`
   const [, setState] = useExternalState(useContext(AppContext), false);
@@ -25,9 +25,9 @@ const PlusButton = () => {
   };
 
   return <button onClick={handleClick}>+</button>;
-};
+}
 
-export const App = () => {
+export function App() {
   const [appState] = useState(() => new State({ counter: 42 }));
 
   return (
@@ -37,4 +37,4 @@ export const App = () => {
       <PlusButton /> <Display />
     </AppContext.Provider>
   );
-};
+}

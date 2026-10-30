@@ -8,9 +8,11 @@ const content = [
   "At vero eos et accusa praesant luptatum delenit aigue duos dolor et mole provident, simil tempor sunt in culpa qui officia de fuga. Et harumd dereud facilis est er expedit disti eligend optio congue nihil impedit doming id quod assumenda est, omnis dolor repellend.",
 ];
 
-export const Section = ({ id }: SectionProps) => (
-  <main data-id={`section-${id}`}>
-    <h1>Section {id}</h1>
-    <p>{content[Number(id)] ?? content[0]}</p>
-  </main>
-);
+export function Section({ id }: SectionProps) {
+  return (
+    <main data-id={`section-${id}`}>
+      <h1>Section {id}</h1>
+      <p>{content[Number(id)] ?? content[0]}</p>
+    </main>
+  );
+}

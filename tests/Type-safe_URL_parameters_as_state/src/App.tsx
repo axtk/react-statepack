@@ -7,7 +7,7 @@ import {
 } from "../../../index.ts";
 import { ShapeSection } from "./ShapeSection.tsx";
 
-export const App = () => {
+export function App() {
   const { route, at } = useRoute();
 
   const initialRedirect = useCallback(
@@ -35,4 +35,4 @@ export const App = () => {
       {at(/^\/shapes\/\d+/, <ShapeSection />)}
     </>
   );
-};
+}

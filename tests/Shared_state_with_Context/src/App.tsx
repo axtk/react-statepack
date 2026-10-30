@@ -5,7 +5,7 @@ const AppContext = createContext(new State(0));
 // `new State(value)` can contain any kind of value,
 // of primitive or nonprimitive type
 
-const Counter = () => {
+function Counter() {
   const [counter, setCounter] = useExternalState(useContext(AppContext));
 
   const handleClick = () => {
@@ -14,9 +14,9 @@ const Counter = () => {
   };
 
   return <button onClick={handleClick}>+ {counter}</button>;
-};
+}
 
-const ResetButton = () => {
+function ResetButton() {
   const [, setCounter] = useExternalState(useContext(AppContext));
 
   const handleClick = () => {
@@ -24,9 +24,9 @@ const ResetButton = () => {
   };
 
   return <button onClick={handleClick}>×</button>;
-};
+}
 
-export const App = () => {
+export function App() {
   const [appState] = useState(() => new State(42));
 
   return (
@@ -36,4 +36,4 @@ export const App = () => {
       <Counter /> <ResetButton />
     </AppContext.Provider>
   );
-};
+}

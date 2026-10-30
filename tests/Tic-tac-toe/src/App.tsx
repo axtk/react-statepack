@@ -49,7 +49,7 @@ function getGameState(state: BoardState): GameState {
 
 const boardState = new State<BoardState>({ moves: [], lastMoveIndex: -1 });
 
-const Cell = ({ index, selected }: { index: number; selected?: boolean }) => {
+function Cell({ index, selected }: { index: number; selected?: boolean }) {
   const [state, setState] = useExternalState(boardState);
 
   // Checking whether the cell index is already among the past moves
@@ -68,11 +68,11 @@ const Cell = ({ index, selected }: { index: number; selected?: boolean }) => {
       {moveIndex === -1 ? "" : cellValues[moveIndex % 2]}
     </button>
   );
-};
+}
 
 const indices = Array.from({ length: 9 }).fill(0);
 
-const Board = () => {
+function Board() {
   const [state] = useExternalState(boardState);
   const { value: status, win } = getGameState(state);
 
@@ -83,9 +83,9 @@ const Board = () => {
       ))}
     </fieldset>
   );
-};
+}
 
-const History = () => {
+function History() {
   const [state, setState] = useExternalState(boardState);
 
   const rollbackTo = (moveIndex: number) => {
@@ -109,9 +109,9 @@ const History = () => {
       ))}
     </ul>
   );
-};
+}
 
-const Controls = () => {
+function Controls() {
   const [, setState] = useExternalState(boardState, false);
 
   const restart = () => {
@@ -123,19 +123,21 @@ const Controls = () => {
       <button onClick={restart}>Restart</button>
     </p>
   );
-};
+}
 
-const StatusBar = () => {
+function StatusBar() {
   const [state] = useExternalState(boardState);
 
   return <p className="status">{getGameState(state).value}</p>;
-};
+}
 
-export const App = () => (
-  <>
-    <Board />
-    <StatusBar />
-    <Controls />
-    <History />
-  </>
-);
+export function App() {
+  return (
+    <>
+      <Board />
+      <StatusBar />
+      <Controls />
+      <History />
+    </>
+  );
+}

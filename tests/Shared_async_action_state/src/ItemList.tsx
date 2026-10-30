@@ -2,7 +2,7 @@ import { type CSSProperties, useCallback, useEffect, useState } from "react";
 import { useTransientState } from "../../../index.ts";
 import { fetchItems as fetchItemsOriginal, type Item } from "./fetchItems.ts";
 
-export const ItemList = () => {
+export function ItemList() {
   const [items, setItems] = useState<Item[]>([]);
 
   // This hook returns the async action's state and a trackable
@@ -52,4 +52,4 @@ export const ItemList = () => {
       </ul>
     </>
   );
-};
+}

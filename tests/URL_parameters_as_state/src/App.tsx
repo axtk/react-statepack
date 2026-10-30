@@ -1,7 +1,7 @@
 import { useRouteState } from "../../../index.ts";
 import { Shape } from "./Shape.tsx";
 
-export const App = () => {
+export function App() {
   // Use `useRouteState()` to manipulate the URL in a
   // `useState()`-like manner.
   const [{ query }, setState] = useRouteState("/");
@@ -30,4 +30,4 @@ export const App = () => {
       </p>
     </main>
   );
-};
+}

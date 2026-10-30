@@ -9,7 +9,7 @@ export type ShapeProps = {
   r?: number | string;
 };
 
-export const Shape = (props: ShapeProps) => {
+export function Shape(props: ShapeProps) {
   const x = toNumber(props.x, 50);
   const y = toNumber(props.y, 50);
   const r = toNumber(props.r, 30);
@@ -38,4 +38,4 @@ export const Shape = (props: ShapeProps) => {
       </svg>
     </div>
   );
-};
+}

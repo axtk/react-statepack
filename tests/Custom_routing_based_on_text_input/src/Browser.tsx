@@ -9,11 +9,11 @@ export type BrowserProps = {
   autoFocus?: boolean;
 };
 
-export const Browser = ({
+export function Browser({
   children,
   initialLocation = "/",
   autoFocus,
-}: BrowserProps) => {
+}: BrowserProps) {
   const inputId = useId();
   const [route] = useState(() => new InputRoute(inputId, initialLocation));
 
@@ -34,4 +34,4 @@ export const Browser = ({
       </div>
     </div>
   );
-};
+}

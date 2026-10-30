@@ -15,7 +15,7 @@ function setTitle({ href }: { href?: string }) {
   document.title = href === "/intro" ? "Intro" : "App";
 }
 
-export const App = () => {
+export function App() {
   const { at, route } = useRoute();
   const [hasUnsavedChanges, setUnsavedChanges] = useState(false);
 
@@ -87,4 +87,4 @@ export const App = () => {
       </main>
     </>
   );
-};
+}

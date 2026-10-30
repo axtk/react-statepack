@@ -8,26 +8,28 @@ import { fetchUsers, type User } from "./fetchUsers.ts";
 const users = new State<Record<string, User>>({});
 const points = new State<Record<string, number>>({});
 
-const UserName = ({ id }: { id: string }) => {
+function UserName({ id }: { id: string }) {
   const [name] = useExternalState(...select(users, (u) => u[id]?.name));
   return <>{name}</>;
-};
+}
 
-const UserPoints = ({ id }: { id: string }) => {
+function UserPoints({ id }: { id: string }) {
   const [value] = useExternalState(...select(points, (p) => p[id]));
   return <strong>{value ?? 0}</strong>;
-};
+}
 
-const TableRow = ({ id }: { id: string }) => (
-  <tr>
-    <td>
-      <UserName id={id} />
-    </td>
-    <td>
-      <UserPoints id={id} />
-    </td>
-  </tr>
-);
+function TableRow({ id }: { id: string }) {
+  return (
+    <tr>
+      <td>
+        <UserName id={id} />
+      </td>
+      <td>
+        <UserPoints id={id} />
+      </td>
+    </tr>
+  );
+}
 
 fetchUsers().then((value) => {
   // State instances don't depend on React, so they can be used both inside and
@@ -46,17 +48,19 @@ function updatePoints() {
 
 updatePoints();
 
-export const App = () => (
-  <table>
-    <thead>
-      <tr>
-        <td>User</td>
-        <td>Points</td>
-      </tr>
-    </thead>
-    <tbody>
-      <TableRow id="jane" />
-      <TableRow id="jack" />
-    </tbody>
-  </table>
-);
+export function App() {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <td>User</td>
+          <td>Points</td>
+        </tr>
+      </thead>
+      <tbody>
+        <TableRow id="jane" />
+        <TableRow id="jack" />
+      </tbody>
+    </table>
+  );
+}

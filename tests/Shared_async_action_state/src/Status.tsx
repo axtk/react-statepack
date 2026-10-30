@@ -1,6 +1,6 @@
 import { useTransientState } from "../../../index.ts";
 
-export const Status = () => {
+export function Status() {
   // The hook accesses the async action state updated in the `ItemList`
   // component by using the same string key
   const [{ initial, pending, error }] = useTransientState("items");
@@ -12,4 +12,4 @@ export const Status = () => {
   if (error) return <>❌ Error</>;
 
   return <>✔️ OK</>;
-};
+}

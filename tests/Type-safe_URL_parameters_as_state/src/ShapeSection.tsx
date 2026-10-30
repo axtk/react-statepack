@@ -23,7 +23,7 @@ const url = createURLBuilder({
   }),
 });
 
-export const ShapeSection = () => {
+export function ShapeSection() {
   // Use `useRouteState()` to manipulate the URL in a
   // `useState()`-like manner.
   // The typed URL builder like `url()` allows to manipulate it with more
@@ -63,4 +63,4 @@ export const ShapeSection = () => {
       </nav>
     </main>
   );
-};
+}

@@ -3,7 +3,7 @@ import { A, useRoute } from "../../../index.ts";
 import { Intro } from "./Intro.tsx";
 import { ItemList } from "./ItemList.lazy.ts";
 
-export const App = () => {
+export function App() {
   const { at } = useRoute();
 
   return (
@@ -28,4 +28,4 @@ export const App = () => {
       )}
     </>
   );
-};
+}

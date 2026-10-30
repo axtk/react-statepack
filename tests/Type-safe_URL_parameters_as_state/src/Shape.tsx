@@ -7,7 +7,7 @@ export type ShapeProps = {
   r?: number;
 };
 
-export const Shape = ({ n, x = 50, y = 50, r = 30 }: ShapeProps) => {
+export function Shape({ n, x = 50, y = 50, r = 30 }: ShapeProps) {
   return (
     <div className="shape">
       <svg viewBox="0 0 100 100" height="240">
@@ -33,4 +33,4 @@ export const Shape = ({ n, x = 50, y = 50, r = 30 }: ShapeProps) => {
       </svg>
     </div>
   );
-};
+}

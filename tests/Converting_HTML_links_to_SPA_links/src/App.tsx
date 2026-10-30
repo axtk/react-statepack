@@ -8,7 +8,7 @@ const htmlContent =
 // replaced with a SPA link component. That's where the `useRouteLinks` hook
 // can help: it makes plain HTML links act like SPA links.
 
-const Intro = () => {
+function Intro() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Convert HTML links inside the specified container to SPA links.
@@ -26,16 +26,18 @@ const Intro = () => {
       />
     </main>
   );
-};
+}
 
-const Story = () => (
-  <main>
-    <h2>Story</h2>
-  </main>
-);
+function Story() {
+  return (
+    <main>
+      <h2>Story</h2>
+    </main>
+  );
+}
 
-export const App = () => {
-  let { at } = useRoute();
+export function App() {
+  const { at } = useRoute();
 
   return (
     <>
@@ -49,4 +51,4 @@ export const App = () => {
       {at("/story", <Story />)}
     </>
   );
-};
+}

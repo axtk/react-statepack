@@ -4,13 +4,13 @@ import { State, useExternalState } from "../../../index.ts";
 
 const AppContext = createContext(new State({ counter: 0 }));
 
-const Display = () => {
+function Display() {
   const [state] = useExternalState(useContext(AppContext));
 
   return <span>{state.counter}</span>;
-};
+}
 
-const PlusButton = () => {
+function PlusButton() {
   const [, setCounter] = useExternalState(useContext(AppContext));
 
   const handleClick = () => {
@@ -25,9 +25,9 @@ const PlusButton = () => {
   };
 
   return <button onClick={handleClick}>+</button>;
-};
+}
 
-export const App = () => {
+export function App() {
   const [appState] = useState(() => new State({ counter: 42 }));
 
   return (
@@ -35,4 +35,4 @@ export const App = () => {
       <PlusButton /> <Display />
     </AppContext.Provider>
   );
-};
+}

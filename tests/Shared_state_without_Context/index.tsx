@@ -5,7 +5,7 @@ const counterState = new State(0);
 // `new State(value)` can contain any kind of value,
 // of primitive or nonprimitive type
 
-const Counter = () => {
+function Counter() {
   const [counter, setCounter] = useExternalState(counterState);
 
   const handleClick = () => {
@@ -14,9 +14,9 @@ const Counter = () => {
   };
 
   return <button onClick={handleClick}>+ {counter}</button>;
-};
+}
 
-const ResetButton = () => {
+function ResetButton() {
   const [, setCounter] = useExternalState(counterState);
 
   const handleClick = () => {
@@ -24,12 +24,14 @@ const ResetButton = () => {
   };
 
   return <button onClick={handleClick}>×</button>;
-};
+}
 
-const App = () => (
-  <>
-    <Counter /> <ResetButton />
-  </>
-);
+function App() {
+  return (
+    <>
+      <Counter /> <ResetButton />
+    </>
+  );
+}
 
 createRoot(document.querySelector("#app")!).render(<App />);

@@ -17,7 +17,7 @@ function renderViewTransition(render: () => void) {
   else render();
 }
 
-export const App = () => {
+export function App() {
   const { at } = useRoute(renderViewTransition);
 
   return (
@@ -36,4 +36,4 @@ export const App = () => {
       ))}
     </>
   );
-};
+}

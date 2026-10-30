@@ -25,25 +25,27 @@ Move local state to the full-fledged shared state with minimal paradigm shift an
 +
 + const counterState = new State(0);
 
-  const Counter = () => {
+  function Counter() {
 -   const [counter, setCounter] = useState(0);
 +   const [counter, setCounter] = useExternalState(counterState);
 
     const handleClick = () => setCounter((value) => value + 1);
 
     return <button onClick={handleClick}>+ {counter}</button>;
-  };
+  }
 
-  const ResetButton = () => {
+  function ResetButton() {
 -   const [, setCounter] = useState(0);
 +   const [, setCounter] = useExternalState(counterState);
 
     const handleClick = () => setCounter(0);
 
     return <button onClick={handleClick}>×</button>;
-  };
+  }
 
-  export const App = () => <><Counter/>{" "}<ResetButton/></>;
+  export function App() {
+    return <><Counter/>{" "}<ResetButton/></>;
+  }
 ```
 
 &#x2BC8; [Live demo: Shared state without Context](https://codesandbox.io/p/sandbox/gxkn85?file=%252Fsrc%252FApp.tsx)
@@ -63,25 +65,25 @@ With SSR, it's common practice to put shared values into React Context rather th
 - const counterState = new State(0);
 + const AppContext = createContext(new State(0));
 
-  const Counter = () => {
+  function Counter() {
 -   const [counter, setCounter] = useExternalState(counterState);
 +   const [counter, setCounter] = useExternalState(useContext(AppContext));
 
     const handleClick = () => setCounter((value) => value + 1);
 
     return <button onClick={handleClick}>+ {counter}</button>;
-  };
+  }
 
-  const ResetButton = () => {
+  function ResetButton() {
 -   const [, setCounter] = useExternalState(counterState);
 +   const [, setCounter] = useExternalState(useContext(AppContext));
 
     const handleClick = () => setCounter(0);
 
     return <button onClick={handleClick}>×</button>;
-  };
+  }
 
-  export const App = () => {
+  export function App() {
 +   const [appState] = useState(() => new State(42));
 
 -   return <><Counter/>{" "}<ResetButton/></>;
@@ -90,7 +92,7 @@ With SSR, it's common practice to put shared values into React Context rather th
 +       <PlusButton/>{" "}<Display/>
 +     </AppContext.Provider>
     );
-  };
+  }
 ```
 
 &#x2BC8; [Live demo: Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
@@ -106,11 +108,11 @@ const AppContext = createContext({
   items: new State(/* Items, e.g. a map of <id>: <item info> */),
 });
 
-const ItemCard = ({ id }) => {
+function ItemCard({ id }) {
   const [items, setItems] = useExternalState(useContext(AppState).items);
 
   // ...
-};
+}
 ```
 
 ⬥ Note that updating the `State` value doesn't change the instance's reference sitting in the React Context and therefore doesn't cause updates of the entire Context. Only the components subscribed to updates of the particular `State` instance by means of `useExternalState(state)` will be notified to re-render.
@@ -127,14 +129,14 @@ const AppContext = createContext({
   // ... Other data on the Context
 });
 
-const ItemCard = ({ id }: { id: string }) => {
+function ItemCard({ id }: { id: string }) {
   const [name] = useExternalState(...select(
     useContext(AppContext).items, // State instance
     (items) => items[id]?.name,   // Selector
   ));
 
   return <div className="item">Name: {name}</div>;
-};
+}
 ```
 
 &#x2BC8; [Live demo: Selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
@@ -151,7 +153,7 @@ Use the second parameter of `useExternalState(state, subscribe?)` for more fine-
 const itemState = new State({/* A map of `<id>: <item>` */});
 
 // Renders a specific item from `itemState`
-const ItemCard = ({ id }) => {
+function ItemCard({ id }) {
   const [items, setItems] = useExternalState(itemState, (render) => {
     // The subscription to the state events returns a cleanup function.
     return itemState.on("update", ({ current, previous }) => {
@@ -162,7 +164,7 @@ const ItemCard = ({ id }) => {
   });
 
   // ...
-};
+}
 ```
 
 ⬥ Set the `subscribe` parameter to `false`, as in `useExternalState(state, false)`, to tell the hook not to subscribe the component to tracking the external state updates altogether. A use case for it is when a component makes use of the external state value setter without using the state value itself. The `false` parameter could have been used in the `ResetButton` in the first example above, but in many cases of infrequent updates with lightweight component renders it might be unnecessary, since React automatically skips updating the DOM when there are no changes.
@@ -204,7 +206,7 @@ URL-based rendering with `at(url, x, y?)` shown below works similarly to conditi
 ```jsx
 import { useRoute } from "react-statepack";
 
-const App = () => {
+function App() {
   const { at } = useRoute();
 
   return (
@@ -214,7 +216,7 @@ const App = () => {
     {at("/", <Intro/>)}
     {at(/^\/sections\/(?<id>\d+)\/?$/, ({ params }) => <Section id={params.id}/>)}
   );
-};
+}
 ```
 
 &#x2BC8; [Live demo: URL-based rendering](https://codesandbox.io/p/sandbox/2nv8ck?file=%252Fsrc%252FApp.tsx)
@@ -236,7 +238,7 @@ The shape of the SPA navigation API is largely aligned with the similar built-in
 ```diff
 + import { A, useRoute } from "react-statepack";
 
-  const UserNav = ({ signedIn }) => {
+  function UserNav({ signedIn }) {
 +   const { route } = useRoute();
 
     const handleClick = () => {
@@ -251,7 +253,7 @@ The shape of the SPA navigation API is largely aligned with the similar built-in
         <button onClick={handleClick}>Profile</button>
       </nav>
     );
-  };
+  }
 ```
 
 &#x2BC8; [Live demo: Link components](https://codesandbox.io/p/sandbox/2nv8ck?file=%252Fsrc%252FApp.tsx)
@@ -294,7 +296,7 @@ function setTitle({ href }) {
   document.title = href === "/intro" ? "Intro" : "App";
 }
 
-const App = () => {
+function App() {
   const { route } = useRoute();
   const [hasUnsavedChanges, setUnsavedChanges] = useState(false);
 
@@ -312,7 +314,7 @@ const App = () => {
   useNavigationComplete(setTitle);
 
   // ...
-};
+}
 ```
 
 &#x2BC8; [Live demo: Routing middleware](https://codesandbox.io/p/sandbox/9ks34r?file=%2Fsrc%2FApp.tsx)
@@ -328,7 +330,7 @@ When it's necessary to put a portion of the app's state to the URL, use this hoo
 ```diff
 + import { useRouteState } from "react-statepack";
 
-  const App = () => {
+  function App() {
 -   const [{ coords }, setState] = useState({ coords: { x: 0, y: 0 } });
 +   const [{ query }, setState] = useRouteState("/");
 
@@ -351,7 +353,7 @@ When it's necessary to put a portion of the app's state to the URL, use this hoo
         <p><button onClick={setPosition}>Move</button></p>
       </>
     );
-  };
+  }
 ```
 
 &#x2BC8; [Live demo: URL parameters as state](https://codesandbox.io/p/sandbox/6rp4sy?file=%252Fsrc%252FApp.tsx)
@@ -462,7 +464,7 @@ In the example below, storing and rendering the essential app data (`items`) and
 - import { fetchItems } from "./fetchItems.js";
 + import { fetchItems as fetchItemsOriginal } from "./fetchItems.js";
 
-  export const ItemList = () => {
+  export function ItemList() {
     const [items, setItems] = useState([]);
 +   const [state, fetchItems] = useTransientState("items", fetchItemsOriginal);
 
@@ -475,14 +477,14 @@ In the example below, storing and rendering the essential app data (`items`) and
 +   if (state.error) return <p>An error occurred</p>;
 
     return <ul>{items.map(/* ... */)}</ul>;
-  };
+  }
 ```
 
 ```diff
 + import { useTransientState } from "react-statepack";
 
-- export const Status = ({ state }) => {
-+ export const Status = () => {
+- export function Status({ state }) {
++ export function Status() {
 +   const [state] = useTransientState("items");
 
     if (state.initial) return null;
@@ -490,7 +492,7 @@ In the example below, storing and rendering the essential app data (`items`) and
     if (state.error) return <>Error</>;
 
     return <>OK</>;
-  };
+  }
 ```
 
 &#x2BC8; [Live demo: Shared async action state](https://codesandbox.io/p/sandbox/x9d2c9?file=%252Fsrc%252FItemList.tsx)

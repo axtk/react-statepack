@@ -1,7 +1,7 @@
 import { A, useRoute } from "../../../index.ts";
 import { Browser } from "./Browser.tsx";
 
-const Content = () => {
+function Content() {
   const { at } = useRoute();
 
   return (
@@ -29,9 +29,9 @@ const Content = () => {
       </section>
     </>
   );
-};
+}
 
-export const App = () => {
+export function App() {
   // The `Browser` components below contain their own `RouteProvider`s
   // interacting with the text inputs. The identical `Content` components
   // respond accordingly to the different `RouteProvider`s closest to them.
@@ -50,4 +50,4 @@ export const App = () => {
       </Browser>
     </>
   );
-};
+}

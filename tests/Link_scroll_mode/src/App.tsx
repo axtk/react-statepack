@@ -1,6 +1,6 @@
 import { A, useRoute } from "../../../index.ts";
 
-export const App = () => {
+export function App() {
   const { at } = useRoute();
 
   return (
@@ -41,4 +41,4 @@ export const App = () => {
       )}
     </>
   );
-};
+}

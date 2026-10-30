@@ -30,41 +30,43 @@ const url = createURLBuilder({
 const sectionCount = 3;
 const sectionStoryCount = 3;
 
-const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <A href={url("/")}>Intro</A>
-      </li>
-      {Array.from({ length: sectionCount }).map((_, i) => (
-        <li key={i}>
-          {/* With the type-aware URL builder `url()`, `params` are
-            typed according to the URL schema above. */}
-          <A
-            href={url("/sections/:sectionId", { params: { sectionId: i + 1 } })}
-          >
-            Section {i + 1}
-          </A>
-          <ul>
-            {Array.from({ length: sectionStoryCount }).map((_, k) => (
-              <li key={`${i}_${k}`}>
-                <A
-                  href={url("/sections/:sectionId/stories/:storyId", {
-                    params: { sectionId: i + 1, storyId: k + 1 },
-                  })}
-                >
-                  Story {i + 1}.{k + 1}
-                </A>
-              </li>
-            ))}
-          </ul>
+function Nav() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <A href={url("/")}>Intro</A>
         </li>
-      ))}
-    </ul>
-  </nav>
-);
+        {Array.from({ length: sectionCount }).map((_, i) => (
+          <li key={i}>
+            {/* With the type-aware URL builder `url()`, `params` are
+              typed according to the URL schema above. */}
+            <A
+              href={url("/sections/:sectionId", { params: { sectionId: i + 1 } })}
+            >
+              Section {i + 1}
+            </A>
+            <ul>
+              {Array.from({ length: sectionStoryCount }).map((_, k) => (
+                <li key={`${i}_${k}`}>
+                  <A
+                    href={url("/sections/:sectionId/stories/:storyId", {
+                      params: { sectionId: i + 1, storyId: k + 1 },
+                    })}
+                  >
+                    Story {i + 1}.{k + 1}
+                  </A>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
 
-export const App = () => {
+export function App() {
   const { at } = useRoute();
 
   return (
@@ -92,4 +94,4 @@ export const App = () => {
       )}
     </>
   );
-};
+}
