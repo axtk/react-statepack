@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useRef } from "react";
+import { type ReactNode, useState } from "react";
 import { State } from "statepack";
 import { TransientStateContext } from "./TransientStateContext.ts";
 import type { TransientState } from "./types/TransientState.ts";
@@ -12,13 +12,15 @@ export type TransientStateProviderProps = {
   children?: ReactNode;
 };
 
+/**
+ * This components provides a scoped transient state container. Its `value`
+ * prop defines the initial value of the transient state map.
+ */
 export const TransientStateProvider = ({
   value,
   children,
 }: TransientStateProviderProps) => {
-  let defaultValueRef = useRef<Map<string, State<TransientState>> | null>(null);
-
-  let stateMap = useMemo(() => {
+  let [stateMap] = useState(() => {
     if (value instanceof Map) return value;
 
     if (typeof value === "object" && value !== null)
@@ -26,11 +28,8 @@ export const TransientStateProvider = ({
         Object.entries(value).map(([key, value]) => [key, new State(value)]),
       );
 
-    if (defaultValueRef.current === null)
-      defaultValueRef.current = new Map<string, State<TransientState>>();
-
-    return defaultValueRef.current;
-  }, [value]);
+    return new Map<string, State<TransientState>>();
+  });
 
   return (
     <TransientStateContext.Provider value={stateMap}>

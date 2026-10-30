@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useMemo } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Route } from "statepack";
 import { RouteContext } from "./RouteContext.ts";
 
@@ -8,15 +8,16 @@ export type RouteProviderProps = {
 };
 
 /**
- * A component providing a Route instance to the nested components.
+ * This component provides a `Route` instance to the nested components. Its
+ * `href` prop defines the initial value of the provided instance.
  */
 export const RouteProvider = ({ href, children }: RouteProviderProps) => {
-  let route = useMemo(() => {
+  let [route] = useState(() => {
     if (href instanceof Route) return href;
     else if (href === undefined || typeof href === "string")
       return new Route(href);
-    else throw new Error("URLProvider's 'href' of unsupported type");
-  }, [href]);
+    else throw new Error("RouteProvider's 'href' of unsupported type");
+  });
 
   useEffect(() => {
     route.start();

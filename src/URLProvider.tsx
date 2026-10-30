@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useMemo } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { URLState } from "statepack";
 import { URLContext } from "./URLContext.ts";
 
@@ -8,15 +8,16 @@ export type URLProviderProps = {
 };
 
 /**
- * A component providing a URL value to the nested components.
+ * This component provides a `URLState` instance to the nested components. Its
+ * `href` prop defines the initial value of the provided instance.
  */
 export const URLProvider = ({ href, children }: URLProviderProps) => {
-  let urlState = useMemo(() => {
+  let [urlState] = useState(() => {
     if (href instanceof URLState) return href;
     else if (href === undefined || typeof href === "string")
       return new URLState(href);
     else throw new Error("URLProvider's 'href' of unsupported type");
-  }, [href]);
+  });
 
   useEffect(() => {
     urlState.start();
