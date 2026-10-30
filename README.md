@@ -43,7 +43,7 @@ Move local state to the full-fledged shared state with minimal paradigm shift an
     return <button onClick={handleClick}>×</button>;
   };
 
-  const App = () => <><Counter/>{" "}<ResetButton/></>;
+  export const App = () => <><Counter/>{" "}<ResetButton/></>;
 ```
 
 &#x2BC8; [Live demo: Shared state without Context](https://codesandbox.io/p/sandbox/gxkn85?file=%252Fsrc%252FApp.tsx)
@@ -57,30 +57,40 @@ With TypeScript, the value type of a `State` instance is inferred from the initi
 With SSR, it's common practice to put shared values into React Context rather than module-level variables to avoid cross-request data sharing. The same applies to external state. Provide external state to multiple components via React Context like any data in a React app:
 
 ```diff
-+ import { createContext, useContext } from "react";
++ import { createContext, useContext, useState } from "react";
+  import { State, useExternalState } from "react-statepack";
 
 - const counterState = new State(0);
 + const AppContext = createContext(new State(0));
-```
 
-```diff
-- const [counter, setCounter] = useExternalState(counterState);
-+ const [counter, setCounter] = useExternalState(useContext(AppContext));
-```
+  const Counter = () => {
+-   const [counter, setCounter] = useExternalState(counterState);
++   const [counter, setCounter] = useExternalState(useContext(AppContext));
 
-```jsx
-import { useState } from "react";
-import { State } from "react-statepack";
+    const handleClick = () => setCounter((value) => value + 1);
 
-const App = () => {
-  const [appState] = useState(() => new State(42));
+    return <button onClick={handleClick}>+ {counter}</button>;
+  };
 
-  return (
-    <AppContext.Provider value={appState}>
-      <PlusButton/>{" "}<Display/>
-    </AppContext.Provider>
-  );
-};
+  const ResetButton = () => {
+-   const [, setCounter] = useExternalState(counterState);
++   const [, setCounter] = useExternalState(useContext(AppContext));
+
+    const handleClick = () => setCounter(0);
+
+    return <button onClick={handleClick}>×</button>;
+  };
+
+  export const App = () => {
++   const [appState] = useState(() => new State(42));
+
+-   return <><Counter/>{" "}<ResetButton/></>;
++   return (
++     <AppContext.Provider value={appState}>
++       <PlusButton/>{" "}<Display/>
++     </AppContext.Provider>
+    );
+  };
 ```
 
 &#x2BC8; [Live demo: Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
