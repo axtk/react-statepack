@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { State, useExternalState } from "../../../index.ts";
 
 const AppContext = createContext(new State({ counter: 0 }));
@@ -27,10 +27,14 @@ const PlusButton = () => {
   return <button onClick={handleClick}>+</button>;
 };
 
-export const App = () => (
-  // Instances of `State` can be provided by regular React Contexts
-  // like any other data in a React app
-  <AppContext.Provider value={new State({ counter: 42 })}>
-    <PlusButton /> <Display />
-  </AppContext.Provider>
-);
+export const App = () => {
+  const [appState] = useState(() => new State({ counter: 42 }));
+
+  return (
+    // Instances of `State` can be provided by regular React Contexts
+    // like any other data in a React app
+    <AppContext.Provider value={appState}>
+      <PlusButton /> <Display />
+    </AppContext.Provider>
+  );
+};
