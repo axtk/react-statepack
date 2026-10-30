@@ -132,7 +132,7 @@ export function App() {
 
 ⬥ Note that updating the `State` value doesn't change the instance's reference sitting in the React Context and therefore doesn't cause updates of the entire Context. Only the components subscribed to updates of the particular `State` instance by means of `useExternalState(state)` will be notified to re-render.
 
-⬥ `useExternalState(state)` allows for `null` and `undefined` values as `state`, but throws an error if such a `state` value is encountered.
+⬥ `useExternalState(state)` accepts `null` and `undefined` values as `state`, but throws an error if such a `state` value is encountered. This helps handle empty (typically `null`) default Context values without repetitive checks and follows a [common pattern](https://react.dev/learn/typescript#typing-usecontext).
 
 ### Selectors
 
