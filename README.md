@@ -143,7 +143,7 @@ import { State, useExternalState, select } from "react-statepack";
 
 const appState = {
   items: new State({/* ... id: { name: string } */}),
-  // ... Other data on the Context
+  // ... Rest of the shared application data
 };
 
 function ItemCard({ id }: { id: string }) {
@@ -154,9 +154,50 @@ function ItemCard({ id }: { id: string }) {
 
   return <div className="item">Name: {name}</div>;
 }
+
+export function App() {
+  return (
+    <>
+      <ItemCard/>
+      {/* ... */}
+    </>
+  );
+}
 ```
 
 &#x2BC8; [Live demo: Selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
+
+Or, alternatively, with a React Context:
+
+```jsx
+import { createContext, useContext, useState } from "react";
+import { State, useExternalState, select } from "react-statepack";
+
+const AppContext = createContext(null);
+
+function ItemCard({ id }: { id: string }) {
+  const [name] = useExternalState(...select(
+    useContext(AppContext)?.items, // State instance
+    (items) => items[id]?.name,    // Selector
+  ));
+
+  return <div className="item">Name: {name}</div>;
+}
+
+export function App() {
+  const [appState] = useState(() => ({
+    items: new State({/* ... id: { name: string } */}),
+    // ... Rest of the shared application data
+  }));
+
+  return (
+    <AppContext.Provider value={appState}>
+      <ItemCard/>
+      {/* ... */}
+    </AppContext.Provider>
+  );
+}
+```
 
 ⬥ With a selector subscription to a `State` instance, the component will only be notified to re-render when the state snapshot returned from the selector changes. By default, whether there's no value change is determined as shallow equality of the previous and current snapshots. Optionally, another equality function can be set as the third parameter of `select()`.
 
