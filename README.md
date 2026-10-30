@@ -89,9 +89,9 @@ With SSR, it's common practice to put shared values into React Context rather th
 -   return <><Counter/>{" "}<ResetButton/></>;
 +   return (
 +     <AppContext.Provider value={appState}>
-+       <PlusButton/>{" "}<Display/>
++       <Counter/>{" "}<ResetButton/>
 +     </AppContext.Provider>
-    );
++   );
   }
 ```
 
