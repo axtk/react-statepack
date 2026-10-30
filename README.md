@@ -69,11 +69,18 @@ With SSR, it's common practice to put shared values into React Context rather th
 ```
 
 ```jsx
-const App = () => (
-  <AppContext.Provider value={new State(42)}>
-    <PlusButton/>{" "}<Display/>
-  </AppContext.Provider>
-);
+import { useState } from "react";
+import { State } from "react-statepack";
+
+const App = () => {
+  const [appState] = useState(() => new State(42));
+
+  return (
+    <AppContext.Provider value={appState}>
+      <PlusButton/>{" "}<Display/>
+    </AppContext.Provider>
+  );
+};
 ```
 
 &#x2BC8; [Live demo: Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
@@ -120,7 +127,7 @@ const ItemCard = ({ id }: { id: string }) => {
 };
 ```
 
-&#x2BC8; [Live demo: Multi-instance state + selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
+&#x2BC8; [Live demo: Selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
 
 ⬥ With a selector subscription to a `State` instance, the component will only be notified to re-render when the state snapshot returned from the selector changes. By default, whether there's no value change is determined as shallow equality of the previous and current snapshots. Optionally, another equality function can be set as the third parameter of `select()`.
 
@@ -549,7 +556,7 @@ Shared state
 - [Shared state without Context](https://codesandbox.io/p/sandbox/gxkn85?file=%252Fsrc%252FApp.tsx)
 - [Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
 - [Shared state with Immer](https://codesandbox.io/p/sandbox/gv4rgw?file=%252Fsrc%252FApp.tsx)
-- [Multi-instance state / Selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
+- [Selectors](https://codesandbox.io/p/sandbox/738w2p?file=%252Fsrc%252FApp.tsx)
 
 Routing
 
