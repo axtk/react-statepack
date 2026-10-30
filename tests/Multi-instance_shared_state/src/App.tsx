@@ -1,28 +1,21 @@
-import { createContext, useContext } from "react";
 import { State, select, useExternalState } from "../../../index.ts";
 import { fetchPoints } from "./fetchPoints.ts";
 import { fetchUsers, type User } from "./fetchUsers.ts";
 
+// The app state can consist of as many State instances as needed.
+// Splitting the app state into multiple State instances allows for more
+// targeted state update subscriptions in components.
 const users = new State<Record<string, User>>({});
 const points = new State<Record<string, number>>({});
 
-// The app state can contain as many State instances as needed.
-// Splitting the app state into multiple State instances allows for more
-// targeted state update subscriptions in components.
-const AppContext = createContext({ users, points });
-
 const UserName = ({ id }: { id: string }) => {
-  const [name] = useExternalState(
-    ...select(useContext(AppContext).users, (users) => users[id]?.name),
-  );
+  const [name] = useExternalState(...select(users, (u) => u[id]?.name));
   return <>{name}</>;
 };
 
 const UserPoints = ({ id }: { id: string }) => {
-  const [points] = useExternalState(
-    ...select(useContext(AppContext).points, (points) => points[id]),
-  );
-  return <strong>{points ?? 0}</strong>;
+  const [value] = useExternalState(...select(points, (p) => p[id]));
+  return <strong>{value ?? 0}</strong>;
 };
 
 const TableRow = ({ id }: { id: string }) => (
