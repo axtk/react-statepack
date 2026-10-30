@@ -42,7 +42,9 @@ function Nav() {
             {/* With the type-aware URL builder `url()`, `params` are
               typed according to the URL schema above. */}
             <A
-              href={url("/sections/:sectionId", { params: { sectionId: i + 1 } })}
+              href={url("/sections/:sectionId", {
+                params: { sectionId: i + 1 },
+              })}
             >
               Section {i + 1}
             </A>
