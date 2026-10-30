@@ -63,7 +63,7 @@ With SSR, it's common practice to put shared values into React Context rather th
   import { State, useExternalState } from "react-statepack";
 
 - const counterState = new State(0);
-+ const AppContext = createContext(new State(0));
++ const AppContext = createContext(null);
 
   function Counter() {
 -   const [counter, setCounter] = useExternalState(counterState);
@@ -84,7 +84,7 @@ With SSR, it's common practice to put shared values into React Context rather th
   }
 
   export function App() {
-+   const [appState] = useState(() => new State(42));
++   const [appState] = useState(() => new State(0));
 
 -   return <><Counter/>{" "}<ResetButton/></>;
 +   return (
@@ -97,25 +97,42 @@ With SSR, it's common practice to put shared values into React Context rather th
 
 &#x2BC8; [Live demo: Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
 
-⬥ Like any data in a React app, the external state can also be split across multiple instances of `State` and multiple Contexts to maintain clearer semantic boundaries and more targeted data update subscriptions.
+⬥ The application state can also be split across multiple instances of `State` and multiple Contexts to maintain clearer semantic boundaries and more targeted data update subscriptions.
 
 ```js
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { State, useExternalState } from "react-statepack";
 
-const AppContext = createContext({
-  users: new State(/* User data, e.g. a map of <id>: <user info> */),
-  items: new State(/* Items, e.g. a map of <id>: <item info> */),
-});
+const AppContext = createContext(null);
 
-function ItemCard({ id }) {
-  const [items, setItems] = useExternalState(useContext(AppState).items);
+function ItemList() {
+  const [items] = useExternalState(useContext(AppContext).items);
 
-  // ...
+  return (
+    <ul>
+      {items.map((item) => <li key={item.id}>{item.name}</li>)}
+    </ul>
+  );
+}
+
+export function App() {
+  const [appState] = useState(() => ({
+    users: new State(/* User data, e.g. a map of <id>: <user info> */),
+    items: new State(/* Items, e.g. a map of <id>: <item info> */),
+  }));
+
+  return (
+    <AppContext.Provider value={appState}>
+      <ItemList/>
+      {/* ... */}
+    </AppContext.Provide>
+  );
 }
 ```
 
 ⬥ Note that updating the `State` value doesn't change the instance's reference sitting in the React Context and therefore doesn't cause updates of the entire Context. Only the components subscribed to updates of the particular `State` instance by means of `useExternalState(state)` will be notified to re-render.
+
+⬥ `useExternalState(state)` allows for `null` and `undefined` values as `state`, but throws an error if such a `state` value is encountered.
 
 ### Selectors
 
@@ -124,15 +141,15 @@ Use the `select(state, selector)` utility with `useExternalState()` to pick a st
 ```jsx
 import { State, useExternalState, select } from "react-statepack";
 
-const AppContext = createContext({
+const appState = {
   items: new State({/* ... id: { name: string } */}),
   // ... Other data on the Context
-});
+};
 
 function ItemCard({ id }: { id: string }) {
   const [name] = useExternalState(...select(
-    useContext(AppContext).items, // State instance
-    (items) => items[id]?.name,   // Selector
+    appState.items,             // State instance
+    (items) => items[id]?.name, // Selector
   ));
 
   return <div className="item">Name: {name}</div>;

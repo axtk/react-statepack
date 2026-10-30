@@ -1,9 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { State, useExternalState } from "../../../index.ts";
 
-const AppContext = createContext(new State(0));
-// `new State(value)` can contain any kind of value,
-// of primitive or nonprimitive type
+const AppContext = createContext<State<number> | null>(null);
 
 function Counter() {
   const [counter, setCounter] = useExternalState(useContext(AppContext));

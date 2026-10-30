@@ -9,12 +9,15 @@ export type SetExternalStateValue<
 > = State<T, P>["setValue"];
 
 export function useExternalState<T, P extends StatePayloadMap<T>, V = T>(
-  state: State<T, P>,
+  state: State<T, P> | null | undefined,
   subscribe?: Subscribe | boolean,
   getSnapshot?: () => V,
 ): [V, SetExternalStateValue<T, P>] {
+  if (state === undefined || state === null)
+    throw new TypeError(`state is ${state} but should be an instance of State`);
+
   if (!isState<T, P>(state))
-    throw new TypeError("'state' is not an instance of State");
+    throw new TypeError("state is not an instance of State");
 
   let [, setRevision] = useState(-1);
 
