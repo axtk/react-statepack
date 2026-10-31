@@ -1,6 +1,6 @@
 import { produce } from "immer";
-import { createContext, useContext, useState } from "react";
-import { State, useExternalState } from "../../../index.ts";
+import { createContext, useContext } from "react";
+import { State, useExternalState, useInitialValue } from "../../../index.ts";
 
 const AppContext = createContext<State<{ count: number }> | null>(null);
 
@@ -28,7 +28,7 @@ function PlusButton() {
 }
 
 export function App() {
-  const [appState] = useState(() => new State({ count: 42 }));
+  const appState = useInitialValue(() => new State({ count: 42 }));
 
   return (
     <AppContext.Provider value={appState}>

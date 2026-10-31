@@ -1,7 +1,8 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode } from "react";
 import { State } from "statepack";
 import { TransientStateContext } from "./TransientStateContext.ts";
 import type { TransientState } from "./types/TransientState.ts";
+import { useInitialValue } from "./useInitialValue.ts";
 
 export type TransientStateProviderProps = {
   value?:
@@ -20,7 +21,7 @@ export const TransientStateProvider = ({
   value,
   children,
 }: TransientStateProviderProps) => {
-  let [stateMap] = useState(() => {
+  let stateMap = useInitialValue(() => {
     if (value instanceof Map) return value;
 
     if (typeof value === "object" && value !== null)

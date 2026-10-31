@@ -1,5 +1,5 @@
-import { type ReactNode, useId, useState } from "react";
-import { RouteProvider } from "../../../index.ts";
+import { type ReactNode, useId } from "react";
+import { RouteProvider, useInitialValue } from "../../../index.ts";
 import { InputRoute } from "./InputRoute.ts";
 import "./Browser.css";
 
@@ -15,7 +15,7 @@ export function Browser({
   autoFocus,
 }: BrowserProps) {
   const inputId = useId();
-  const [route] = useState(() => new InputRoute(inputId, initialLocation));
+  const route = useInitialValue(() => new InputRoute(inputId, initialLocation));
 
   return (
     <div className="browser">

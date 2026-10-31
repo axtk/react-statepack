@@ -59,8 +59,9 @@ With TypeScript, the value type of a `State` instance is inferred from the initi
 With SSR, it's common practice to put shared values into React Context rather than module-level variables to avoid cross-request data sharing. The same applies to external state. Provide external state to multiple components via React Context like any data in a React app:
 
 ```diff
-+ import { createContext, useContext, useState } from "react";
-  import { State, useExternalState } from "react-statepack";
++ import { createContext, useContext } from "react";
+- import { State, useExternalState } from "react-statepack";
++ import { State, useExternalState, useInitialValue } from "react-statepack";
 
 - const counterState = new State(0);
 + const AppContext = createContext(null);
@@ -84,7 +85,7 @@ With SSR, it's common practice to put shared values into React Context rather th
   }
 
   export function App() {
-+   const [appState] = useState(() => new State(0));
++   const appState = useInitialValue(() => new State(0));
 
 -   return <><Counter/>{" "}<ResetButton/></>;
 +   return (
@@ -97,11 +98,13 @@ With SSR, it's common practice to put shared values into React Context rather th
 
 &#x2BC8; [Live demo: Shared state with Context](https://codesandbox.io/p/sandbox/9mpfsf?file=%252Fsrc%252FApp.tsx)
 
+⬥ The `useInitialValue(initializer)` hook returns a value that remains unchanged across potential re-renders by calling the `initializer` function only once. Unlike `useState()` with an initializer, `useInitialValue()` seeks to bypass extra initializer calls in development Strict Mode, too. Under the hood, this hook wraps up the common pattern of [stabilizing values with React's `useRef()`](https://react.dev/reference/react/useRef#avoiding-recreating-the-ref-contents).
+
 ⬥ The application state can also be split across multiple instances of `State` and multiple Contexts to maintain clearer semantic boundaries and more targeted data update subscriptions.
 
 ```js
-import { createContext, useContext, useState } from "react";
-import { State, useExternalState } from "react-statepack";
+import { createContext, useContext } from "react";
+import { State, useExternalState, useInitialValue } from "react-statepack";
 
 const AppContext = createContext(null);
 
@@ -116,7 +119,7 @@ function ItemList() {
 }
 
 export function App() {
-  const [appState] = useState(() => ({
+  const appState = useInitialValue(() => ({
     users: new State(/* User data, e.g. a map of <id>: <user info> */),
     items: new State(/* Items, e.g. a map of <id>: <item info> */),
   }));
@@ -170,8 +173,8 @@ export function App() {
 Or, alternatively, with a React Context:
 
 ```jsx
-import { createContext, useContext, useState } from "react";
-import { State, useExternalState, select } from "react-statepack";
+import { createContext, useContext } from "react";
+import { State, useExternalState, useInitialValue, select } from "react-statepack";
 
 const AppContext = createContext(null);
 
@@ -185,7 +188,7 @@ function ItemCard({ id }: { id: string }) {
 }
 
 export function App() {
-  const [appState] = useState(() => ({
+  const appState = useInitialValue(() => ({
     items: new State({/* ... id: { name: string } */}),
     // ... Rest of the shared application data
   }));

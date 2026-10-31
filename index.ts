@@ -16,6 +16,7 @@ export * from "./src/types/TransientState.ts";
 export * from "./src/URLContext.ts";
 export * from "./src/URLProvider.tsx";
 export * from "./src/useExternalState.ts";
+export * from "./src/useInitialValue.ts";
 export * from "./src/useLinkProps.ts";
 export * from "./src/useNavigationComplete.ts";
 export * from "./src/useNavigationStart.ts";

@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import { State, useExternalState } from "../../../index.ts";
+import { createContext, useContext } from "react";
+import { State, useExternalState, useInitialValue } from "../../../index.ts";
 
 const AppContext = createContext<State<number> | null>(null);
 
@@ -25,7 +25,7 @@ function ResetButton() {
 }
 
 export function App() {
-  const [appState] = useState(() => new State(42));
+  const appState = useInitialValue(() => new State(42));
 
   return (
     // Instances of `State` can be provided by regular React Contexts

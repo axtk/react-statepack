@@ -1,6 +1,7 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect } from "react";
 import { URLState } from "statepack";
 import { URLContext } from "./URLContext.ts";
+import { useInitialValue } from "./useInitialValue.ts";
 
 export type URLProviderProps = {
   href?: string | URLState | undefined;
@@ -12,7 +13,7 @@ export type URLProviderProps = {
  * `href` prop defines the initial value of the provided instance.
  */
 export const URLProvider = ({ href, children }: URLProviderProps) => {
-  let [urlState] = useState(() => {
+  let urlState = useInitialValue(() => {
     if (href instanceof URLState) return href;
     else if (href === undefined || typeof href === "string")
       return new URLState(href);
