@@ -6,21 +6,21 @@ const counterState = new State(0);
 // of primitive or nonprimitive type
 
 function Counter() {
-  const [counter, setCounter] = useExternalState(counterState);
+  const [count, setCount] = useExternalState(counterState);
 
   const handleClick = () => {
     // Same as with setters from `useState()`
-    setCounter((value) => value + 1);
+    setCount((value) => value + 1);
   };
 
-  return <button onClick={handleClick}>+ {counter}</button>;
+  return <button onClick={handleClick}>+ {count}</button>;
 }
 
 function ResetButton() {
-  const [, setCounter] = useExternalState(counterState);
+  const [, setCount] = useExternalState(counterState);
 
   const handleClick = () => {
-    setCounter(0);
+    setCount(0);
   };
 
   return <button onClick={handleClick}>×</button>;

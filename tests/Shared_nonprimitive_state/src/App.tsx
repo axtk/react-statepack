@@ -1,12 +1,12 @@
 import { createContext, useContext, useState } from "react";
 import { State, useExternalState } from "../../../index.ts";
 
-const AppContext = createContext<State<{ counter: number }> | null>(null);
+const AppContext = createContext<State<{ count: number }> | null>(null);
 
 function Display() {
   const [state] = useExternalState(useContext(AppContext));
 
-  return <span>{state.counter}</span>;
+  return <span>{state.count}</span>;
 }
 
 function PlusButton() {
@@ -18,7 +18,7 @@ function PlusButton() {
     // Same as with setters from `useState()`
     setState((prevState) => ({
       ...prevState,
-      counter: prevState.counter + 1,
+      count: prevState.count + 1,
     }));
   };
 
@@ -26,7 +26,7 @@ function PlusButton() {
 }
 
 export function App() {
-  const [appState] = useState(() => new State({ counter: 42 }));
+  const [appState] = useState(() => new State({ count: 42 }));
 
   return (
     // Instances of `State` can be provided by regular React Contexts

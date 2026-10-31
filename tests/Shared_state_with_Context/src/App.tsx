@@ -4,21 +4,21 @@ import { State, useExternalState } from "../../../index.ts";
 const AppContext = createContext<State<number> | null>(null);
 
 function Counter() {
-  const [counter, setCounter] = useExternalState(useContext(AppContext));
+  const [count, setCount] = useExternalState(useContext(AppContext));
 
   const handleClick = () => {
     // Same as with setters from `useState()`
-    setCounter((value) => value + 1);
+    setCount((value) => value + 1);
   };
 
-  return <button onClick={handleClick}>+ {counter}</button>;
+  return <button onClick={handleClick}>+ {count}</button>;
 }
 
 function ResetButton() {
-  const [, setCounter] = useExternalState(useContext(AppContext));
+  const [, setCount] = useExternalState(useContext(AppContext));
 
   const handleClick = () => {
-    setCounter(0);
+    setCount(0);
   };
 
   return <button onClick={handleClick}>×</button>;
